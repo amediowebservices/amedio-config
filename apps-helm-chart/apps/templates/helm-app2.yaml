@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: helm-app2
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: helm-app2
+    server: {{ .Values.spec.destination.server }}
+  project: default
+  source:
+    path: helm-hooks
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.targetRevision }}
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      selfHeal: true
+    syncOptions:
+    - allowEmpty=true
+    - CreateNamespace=true
+

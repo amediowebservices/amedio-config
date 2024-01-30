@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  creationTimestamp: null
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/name: root-app-helm-approach
+  name: root-app-helm-approach
+  namespace: argocd
+spec:
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  ignoreDifferences:
+  - group: argoproj.io
+    jsonPointers:
+    - /status
+    kind: Application
+  project: default
+  source:
+    path: apps-helm-chart/apps
+    repoURL: https://github.com/amediowebservices/amedio-config.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      selfHeal: true
+    syncOptions:
+    - allowEmpty=true
+    - CreateNamespace=true
